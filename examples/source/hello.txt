@@ -1,0 +1,20 @@
+  org 0
+  out: word: 4095
+  hello: word: 13, 'Hello, world!'
+  hello_addr: word: hello
+  cnt: word: 0
+
+  org 1024
+  start: load hello
+      store cnt
+      loop: load hello_addr
+            inc
+            store hello_addr
+            load (hello_addr)
+            store (out)
+            load cnt
+            dec
+            store cnt
+            jmz end
+            jmp loop
+      end: hlt

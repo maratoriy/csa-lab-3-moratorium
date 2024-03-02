@@ -1,0 +1,12 @@
+  org 0
+  line_end: word: 10
+  out: word: 4095
+  in: word: 4094
+
+  org 1024
+  start: load (in)
+         cmp line_end
+         jmz end
+         store (out)
+         jmp start
+         end: hlt

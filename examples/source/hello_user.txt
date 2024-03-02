@@ -1,0 +1,68 @@
+  org 0
+  in: word: 4094
+  out: word: 4095
+
+  line_end: word: 10
+
+  hello: word: 18, 'What is your name?'
+  hello_addr: word: hello
+  hello_cnt: word: 0
+
+  hello_user: word: 7, 'Hello, '
+  hello_user_addr: word: hello_user
+  hello_user_cnt: word: 0
+
+  org 1024
+  start: load hello
+      store hello_cnt
+      loop1: load hello_addr
+             inc
+             store hello_addr
+             load (hello_addr)
+             store (out)
+             load hello_cnt
+             dec
+             store hello_cnt
+             jmnz loop1
+      input: load (in)
+             cmp line_end
+             jmz hello_p
+             store (user_name_ptr)
+             load user_name_ptr
+             inc
+             store user_name_ptr
+             load user_name_cnt
+             inc
+             store user_name_cnt
+             jmp input
+      hello_p: load line_end
+             store (out)
+             load hello_user
+             store hello_user_cnt
+      loop2: load hello_user_addr
+             inc
+             store hello_user_addr
+             load (hello_user_addr)
+             store (out)
+             load hello_user_cnt
+             dec
+             store hello_user_cnt
+             jmnz loop2
+      print: load user_name_start
+             store user_name_ptr
+      print_loop: load user_name_cnt
+             jmz end
+             dec
+             store user_name_cnt
+             load (user_name_ptr)
+             store (out)
+             load user_name_ptr
+             inc
+             store user_name_ptr
+             jmp print_loop
+      end: hlt
+
+  user_name_start: word: user_name
+  user_name_cnt: word: 0
+  user_name_ptr: word: user_name
+  user_name: word: 0

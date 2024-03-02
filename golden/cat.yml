@@ -1,0 +1,143 @@
+in_source: |-
+  org 0
+  line_end: word: 10
+  out: word: 4095
+  in: word: 4094
+
+  org 1024
+  start: load (in)
+         cmp line_end
+         jmz end
+         store (out)
+         jmp start
+         end: hlt
+
+in_stdin: |-
+  ['h', 'e', 'l', 'l', 'o', '\n']
+out_code: |
+  [
+  {'start_addr': 1024 },
+  {'index': 0, 'value': 10, 'opcode': 'nop'},
+  {'index': 1, 'value': 4095, 'opcode': 'nop'},
+  {'index': 2, 'value': 4094, 'opcode': 'nop'},
+  {'index': 1024, 'opcode': 'load', 'operand': 2, 'value': 0, 'address': True},
+  {'index': 1025, 'opcode': 'cmp', 'operand': 0, 'value': 0, 'address': False},
+  {'index': 1026, 'opcode': 'jmz', 'operand': 1029, 'value': 0, 'address': False},
+  {'index': 1027, 'opcode': 'store', 'operand': 1, 'value': 0, 'address': True},
+  {'index': 1028, 'opcode': 'jmp', 'operand': 1024, 'value': 0, 'address': False},
+  {'index': 1029, 'opcode': 'hlt', 'value': 0}]
+out_stdout: |
+  LINES OF CODES: 12 NUMBER OF INSTRUCTIONS: 9
+  Output: hello
+  Instruction number: 28
+  Ticks: 96
+out_log: |
+  INFO    TICK:    0 | AC 0       | IP: 1025 | AR: 1024 | SP: 0    | PS: 00010 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: load 2       | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:    1 | AC 0       | IP: 1025 | AR: 2    | SP: 0    | PS: 00010 | DR: 4094    | MEM[AR] 4094    | MEM[SP] 10      | CR: load 2       | main: AF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    INPUT h
+  INFO    TICK:    2 | AC 0       | IP: 1025 | AR: 4094 | SP: 0    | PS: 00010 | DR: 104     | MEM[AR] 104     | MEM[SP] 10      | CR: load 2       | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:    3 | AC 104     | IP: 1025 | AR: 4094 | SP: 0    | PS: 00000 | DR: 104     | MEM[AR] 104     | MEM[SP] 10      | CR: load 2       | main: EF: DR -> AC
+  INFO    TICK:    4 | AC 104     | IP: 1026 | AR: 1025 | SP: 0    | PS: 00000 | DR: 104     | MEM[AR] 0       | MEM[SP] 10      | CR: cmp 0        | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:    5 | AC 104     | IP: 1026 | AR: 0    | SP: 0    | PS: 00000 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:    6 | AC 104     | IP: 1026 | AR: 0    | SP: 0    | PS: 00001 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: EF: AC cmp DR -> AC
+  INFO    TICK:    7 | AC 104     | IP: 1027 | AR: 1026 | SP: 0    | PS: 00001 | DR: 10      | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:    8 | AC 104     | IP: 1027 | AR: 1029 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:    9 | AC 104     | IP: 1027 | AR: 1029 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: EF: NOP
+  INFO    TICK:   10 | AC 104     | IP: 1028 | AR: 1027 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: store 1      | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   11 | AC 104     | IP: 1028 | AR: 1    | SP: 0    | PS: 00001 | DR: 4095    | MEM[AR] 4095    | MEM[SP] 10      | CR: store 1      | main: AF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   12 | AC 104     | IP: 1028 | AR: 4095 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: store 1      | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    OUTPUT h
+  INFO    TICK:   13 | AC 104     | IP: 1028 | AR: 4095 | SP: 0    | PS: 00001 | DR: 104     | MEM[AR] 104     | MEM[SP] 10      | CR: store 1      | main: EF: AC -> DR, DR -> MEM[AR]
+  INFO    TICK:   14 | AC 104     | IP: 1029 | AR: 1028 | SP: 0    | PS: 00001 | DR: 104     | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   15 | AC 104     | IP: 1029 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   16 | AC 104     | IP: 1024 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: EF: AR -> IP
+  INFO    TICK:   17 | AC 104     | IP: 1025 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: load 2       | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   18 | AC 104     | IP: 1025 | AR: 2    | SP: 0    | PS: 00001 | DR: 4094    | MEM[AR] 4094    | MEM[SP] 10      | CR: load 2       | main: AF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    INPUT e
+  INFO    TICK:   19 | AC 104     | IP: 1025 | AR: 4094 | SP: 0    | PS: 00001 | DR: 101     | MEM[AR] 101     | MEM[SP] 10      | CR: load 2       | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   20 | AC 101     | IP: 1025 | AR: 4094 | SP: 0    | PS: 00000 | DR: 101     | MEM[AR] 101     | MEM[SP] 10      | CR: load 2       | main: EF: DR -> AC
+  INFO    TICK:   21 | AC 101     | IP: 1026 | AR: 1025 | SP: 0    | PS: 00000 | DR: 101     | MEM[AR] 0       | MEM[SP] 10      | CR: cmp 0        | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   22 | AC 101     | IP: 1026 | AR: 0    | SP: 0    | PS: 00000 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   23 | AC 101     | IP: 1026 | AR: 0    | SP: 0    | PS: 00001 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: EF: AC cmp DR -> AC
+  INFO    TICK:   24 | AC 101     | IP: 1027 | AR: 1026 | SP: 0    | PS: 00001 | DR: 10      | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   25 | AC 101     | IP: 1027 | AR: 1029 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   26 | AC 101     | IP: 1027 | AR: 1029 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: EF: NOP
+  INFO    TICK:   27 | AC 101     | IP: 1028 | AR: 1027 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: store 1      | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   28 | AC 101     | IP: 1028 | AR: 1    | SP: 0    | PS: 00001 | DR: 4095    | MEM[AR] 4095    | MEM[SP] 10      | CR: store 1      | main: AF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   29 | AC 101     | IP: 1028 | AR: 4095 | SP: 0    | PS: 00001 | DR: 104     | MEM[AR] 104     | MEM[SP] 10      | CR: store 1      | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    OUTPUT e
+  INFO    TICK:   30 | AC 101     | IP: 1028 | AR: 4095 | SP: 0    | PS: 00001 | DR: 101     | MEM[AR] 101     | MEM[SP] 10      | CR: store 1      | main: EF: AC -> DR, DR -> MEM[AR]
+  INFO    TICK:   31 | AC 101     | IP: 1029 | AR: 1028 | SP: 0    | PS: 00001 | DR: 101     | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   32 | AC 101     | IP: 1029 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   33 | AC 101     | IP: 1024 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: EF: AR -> IP
+  INFO    TICK:   34 | AC 101     | IP: 1025 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: load 2       | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   35 | AC 101     | IP: 1025 | AR: 2    | SP: 0    | PS: 00001 | DR: 4094    | MEM[AR] 4094    | MEM[SP] 10      | CR: load 2       | main: AF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    INPUT l
+  INFO    TICK:   36 | AC 101     | IP: 1025 | AR: 4094 | SP: 0    | PS: 00001 | DR: 108     | MEM[AR] 108     | MEM[SP] 10      | CR: load 2       | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   37 | AC 108     | IP: 1025 | AR: 4094 | SP: 0    | PS: 00000 | DR: 108     | MEM[AR] 108     | MEM[SP] 10      | CR: load 2       | main: EF: DR -> AC
+  INFO    TICK:   38 | AC 108     | IP: 1026 | AR: 1025 | SP: 0    | PS: 00000 | DR: 108     | MEM[AR] 0       | MEM[SP] 10      | CR: cmp 0        | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   39 | AC 108     | IP: 1026 | AR: 0    | SP: 0    | PS: 00000 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   40 | AC 108     | IP: 1026 | AR: 0    | SP: 0    | PS: 00001 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: EF: AC cmp DR -> AC
+  INFO    TICK:   41 | AC 108     | IP: 1027 | AR: 1026 | SP: 0    | PS: 00001 | DR: 10      | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   42 | AC 108     | IP: 1027 | AR: 1029 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   43 | AC 108     | IP: 1027 | AR: 1029 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: EF: NOP
+  INFO    TICK:   44 | AC 108     | IP: 1028 | AR: 1027 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: store 1      | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   45 | AC 108     | IP: 1028 | AR: 1    | SP: 0    | PS: 00001 | DR: 4095    | MEM[AR] 4095    | MEM[SP] 10      | CR: store 1      | main: AF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   46 | AC 108     | IP: 1028 | AR: 4095 | SP: 0    | PS: 00001 | DR: 101     | MEM[AR] 101     | MEM[SP] 10      | CR: store 1      | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    OUTPUT l
+  INFO    TICK:   47 | AC 108     | IP: 1028 | AR: 4095 | SP: 0    | PS: 00001 | DR: 108     | MEM[AR] 108     | MEM[SP] 10      | CR: store 1      | main: EF: AC -> DR, DR -> MEM[AR]
+  INFO    TICK:   48 | AC 108     | IP: 1029 | AR: 1028 | SP: 0    | PS: 00001 | DR: 108     | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   49 | AC 108     | IP: 1029 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   50 | AC 108     | IP: 1024 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: EF: AR -> IP
+  INFO    TICK:   51 | AC 108     | IP: 1025 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: load 2       | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   52 | AC 108     | IP: 1025 | AR: 2    | SP: 0    | PS: 00001 | DR: 4094    | MEM[AR] 4094    | MEM[SP] 10      | CR: load 2       | main: AF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    INPUT l
+  INFO    TICK:   53 | AC 108     | IP: 1025 | AR: 4094 | SP: 0    | PS: 00001 | DR: 108     | MEM[AR] 108     | MEM[SP] 10      | CR: load 2       | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   54 | AC 108     | IP: 1025 | AR: 4094 | SP: 0    | PS: 00000 | DR: 108     | MEM[AR] 108     | MEM[SP] 10      | CR: load 2       | main: EF: DR -> AC
+  INFO    TICK:   55 | AC 108     | IP: 1026 | AR: 1025 | SP: 0    | PS: 00000 | DR: 108     | MEM[AR] 0       | MEM[SP] 10      | CR: cmp 0        | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   56 | AC 108     | IP: 1026 | AR: 0    | SP: 0    | PS: 00000 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   57 | AC 108     | IP: 1026 | AR: 0    | SP: 0    | PS: 00001 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: EF: AC cmp DR -> AC
+  INFO    TICK:   58 | AC 108     | IP: 1027 | AR: 1026 | SP: 0    | PS: 00001 | DR: 10      | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   59 | AC 108     | IP: 1027 | AR: 1029 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   60 | AC 108     | IP: 1027 | AR: 1029 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: EF: NOP
+  INFO    TICK:   61 | AC 108     | IP: 1028 | AR: 1027 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: store 1      | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   62 | AC 108     | IP: 1028 | AR: 1    | SP: 0    | PS: 00001 | DR: 4095    | MEM[AR] 4095    | MEM[SP] 10      | CR: store 1      | main: AF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   63 | AC 108     | IP: 1028 | AR: 4095 | SP: 0    | PS: 00001 | DR: 108     | MEM[AR] 108     | MEM[SP] 10      | CR: store 1      | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    OUTPUT l
+  INFO    TICK:   64 | AC 108     | IP: 1028 | AR: 4095 | SP: 0    | PS: 00001 | DR: 108     | MEM[AR] 108     | MEM[SP] 10      | CR: store 1      | main: EF: AC -> DR, DR -> MEM[AR]
+  INFO    TICK:   65 | AC 108     | IP: 1029 | AR: 1028 | SP: 0    | PS: 00001 | DR: 108     | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   66 | AC 108     | IP: 1029 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   67 | AC 108     | IP: 1024 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: EF: AR -> IP
+  INFO    TICK:   68 | AC 108     | IP: 1025 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: load 2       | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   69 | AC 108     | IP: 1025 | AR: 2    | SP: 0    | PS: 00001 | DR: 4094    | MEM[AR] 4094    | MEM[SP] 10      | CR: load 2       | main: AF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    INPUT o
+  INFO    TICK:   70 | AC 108     | IP: 1025 | AR: 4094 | SP: 0    | PS: 00001 | DR: 111     | MEM[AR] 111     | MEM[SP] 10      | CR: load 2       | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   71 | AC 111     | IP: 1025 | AR: 4094 | SP: 0    | PS: 00000 | DR: 111     | MEM[AR] 111     | MEM[SP] 10      | CR: load 2       | main: EF: DR -> AC
+  INFO    TICK:   72 | AC 111     | IP: 1026 | AR: 1025 | SP: 0    | PS: 00000 | DR: 111     | MEM[AR] 0       | MEM[SP] 10      | CR: cmp 0        | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   73 | AC 111     | IP: 1026 | AR: 0    | SP: 0    | PS: 00000 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   74 | AC 111     | IP: 1026 | AR: 0    | SP: 0    | PS: 00001 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: EF: AC cmp DR -> AC
+  INFO    TICK:   75 | AC 111     | IP: 1027 | AR: 1026 | SP: 0    | PS: 00001 | DR: 10      | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   76 | AC 111     | IP: 1027 | AR: 1029 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   77 | AC 111     | IP: 1027 | AR: 1029 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: EF: NOP
+  INFO    TICK:   78 | AC 111     | IP: 1028 | AR: 1027 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: store 1      | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   79 | AC 111     | IP: 1028 | AR: 1    | SP: 0    | PS: 00001 | DR: 4095    | MEM[AR] 4095    | MEM[SP] 10      | CR: store 1      | main: AF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   80 | AC 111     | IP: 1028 | AR: 4095 | SP: 0    | PS: 00001 | DR: 108     | MEM[AR] 108     | MEM[SP] 10      | CR: store 1      | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    OUTPUT o
+  INFO    TICK:   81 | AC 111     | IP: 1028 | AR: 4095 | SP: 0    | PS: 00001 | DR: 111     | MEM[AR] 111     | MEM[SP] 10      | CR: store 1      | main: EF: AC -> DR, DR -> MEM[AR]
+  INFO    TICK:   82 | AC 111     | IP: 1029 | AR: 1028 | SP: 0    | PS: 00001 | DR: 111     | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   83 | AC 111     | IP: 1029 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   84 | AC 111     | IP: 1024 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmp 1024     | main: EF: AR -> IP
+  INFO    TICK:   85 | AC 111     | IP: 1025 | AR: 1024 | SP: 0    | PS: 00001 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: load 2       | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   86 | AC 111     | IP: 1025 | AR: 2    | SP: 0    | PS: 00001 | DR: 4094    | MEM[AR] 4094    | MEM[SP] 10      | CR: load 2       | main: AF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    INPUT 
+
+  INFO    TICK:   87 | AC 111     | IP: 1025 | AR: 4094 | SP: 0    | PS: 00001 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: load 2       | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   88 | AC 10      | IP: 1025 | AR: 4094 | SP: 0    | PS: 00000 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: load 2       | main: EF: DR -> AC
+  INFO    TICK:   89 | AC 10      | IP: 1026 | AR: 1025 | SP: 0    | PS: 00000 | DR: 10      | MEM[AR] 0       | MEM[SP] 10      | CR: cmp 0        | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   90 | AC 10      | IP: 1026 | AR: 0    | SP: 0    | PS: 00000 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   91 | AC 10      | IP: 1026 | AR: 0    | SP: 0    | PS: 00011 | DR: 10      | MEM[AR] 10      | MEM[SP] 10      | CR: cmp 0        | main: EF: AC cmp DR -> AC
+  INFO    TICK:   92 | AC 10      | IP: 1027 | AR: 1026 | SP: 0    | PS: 00011 | DR: 10      | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   93 | AC 10      | IP: 1027 | AR: 1029 | SP: 0    | PS: 00011 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: OF: CR[operand] -> DR, DR -> AR, MEM[AR] -> DR
+  INFO    TICK:   94 | AC 10      | IP: 1029 | AR: 1029 | SP: 0    | PS: 00011 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: jmz 1029     | main: EF: AR -> IP
+  INFO    TICK:   95 | AC 10      | IP: 1030 | AR: 1029 | SP: 0    | PS: 00011 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: hlt          | main: IF: IP -> AR, IP + 1 -> IP, MEM[AR] -> DR, DR -> CR
+  INFO    TICK:   96 | AC 10      | IP: 1030 | AR: 1029 | SP: 0    | PS: 00011 | DR: 0       | MEM[AR] 0       | MEM[SP] 10      | CR: hlt          | main: EF: END OF THE SIMULATION

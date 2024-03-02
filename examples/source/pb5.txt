@@ -1,0 +1,60 @@
+  org 0
+  out: word: 4095
+
+  start_num_ascii: word: 48
+  num_system: word: 10
+
+  target_div: word: 20
+  cur_div: word: 11
+
+  inc_num: word: 2520
+  cur_num: word: 2520
+
+  org 1024
+  start: load cur_num
+         div cur_div
+         jmc not_div
+         load cur_div
+         cmp target_div
+         jmz parse
+         inc
+         store cur_div
+         load cur_num
+         store inc_num
+         jmp start
+  parse: load cur_num
+         mod num_system
+         add start_num_ascii
+         store (buf_ptr)
+         load buf_ptr
+         inc
+         store buf_ptr
+         load cnt
+         inc
+         store cnt
+         load cur_num
+         div num_system
+         store cur_num
+         jmnz parse
+  print: load cnt
+         jmz end
+         dec
+         store cnt
+         load buf_ptr
+         dec
+         store buf_ptr
+         load (buf_ptr)
+         store (out)
+         dec
+         store (buf_ptr)
+         jmp print
+  end:   hlt
+
+  not_div: load cur_num
+      add inc_num
+      store cur_num
+      jmp start
+
+  cnt: word: 0
+  buf_ptr: word: buf
+  buf: word: 0
