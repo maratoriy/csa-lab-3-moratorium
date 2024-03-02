@@ -1,7 +1,7 @@
 # MyavAsm. Транслятор и модель
 
-- P33081, Кравцова Кристина Владимировна.
-- `asm | acc | neum | hw | tick | struct | trap | mem | pstr | prob2 | spi`
+- P33081, Киушкин Артем Эдуардович
+- `asm | acc | neum | hw | tick | struct | stream | mem | pstr | prob5 | 8bit`
 - Без усложнения
 
 ## Язык программирования
