@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import logging
 import sys
+from typing import Any
 
 from isa import *
 
@@ -60,7 +61,7 @@ class ALU:
     def calc_op(self, left, right, op_type):
         operations = {ADD: self.add, SUB: self.sub, CMP: self.sub, DIV: self.div, MOD: self.mod}
 
-        func = operations.get(op_type)
+        func: Any | None = operations.get(op_type)
 
         if not func:
             raise Exception("INCORRECT BINARY OPERRATION")
@@ -288,7 +289,8 @@ class ControlUnit:
 
     def __print__(self, comment):
         state_repr = (
-            "TICK: {:4} | AC {:7} | IP: {:4} | AR: {:4} | SP: {:4} | PS: {:3} | DR: {:7} | MEM[AR] {:7} | MEM[SP] {:7} | CR: {:12} |"
+            "TICK: {:4} | AC {:7} | IP: {:4} | AR: {:4} | SP: {:4} | PS: {:3} "
+            "| DR: {:7} | MEM[AR] {:7} | MEM[SP] {:7} | CR: {:12} |"
         ).format(
             self._tick,
             self.toStrIfNeeded(self.get_reg("AC")),
